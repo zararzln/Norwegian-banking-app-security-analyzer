@@ -1,26 +1,22 @@
-# Norwegian Banking App Security Analyzer
+# Norwegian Banking App Security Analyzer - Demo Platform
 
-Advanced security intelligence platform for analyzing mobile app protection effectiveness across the Norwegian banking sector.
+**Security analysis framework demonstration using simulated Norwegian banking sector data**
 
 ## Overview
-Automated framework that evaluates protection solutions used by 25+ Norwegian banking apps, tests bypass techniques, and generates comprehensive security intelligence reports.
+Proof-of-concept security intelligence platform that demonstrates methodologies for analyzing mobile app protection effectiveness. Uses simulated data from 25+ Norwegian banking apps to showcase security analysis workflows, bypass testing frameworks, and competitive intelligence generation.
 
 ## Features
-- **Automated App Analysis**: Collects and analyzes mobile banking applications
-- **Protection Detection**: Identifies security solutions (Promon SHIELD, root detection, etc.)
-- **Bypass Testing**: Tests common attack techniques against protection mechanisms  
-- **Interactive Dashboard**: Professional Streamlit-based analytics platform
-- **Competitive Intelligence**: Market analysis and strategic recommendations
+* **Simulated App Analysis**: Demonstrates app information collection and analysis workflows
+* **Protection Detection Framework**: Shows how to identify security solutions (Promon SHIELD, root detection, etc.)
+* **Bypass Testing Simulation**: Models common attack techniques against protection mechanisms
+* **Interactive Dashboard**: Professional Streamlit-based analytics platform with real-time visualizations
+* **Competitive Intelligence**: Market analysis and strategic recommendation generation
 
-## Tech Stack
-- Python 3.9+
-- Streamlit for dashboards
-- Plotly for advanced visualizations
-- BeautifulSoup for data collection
-- Pandas for data analysis
+## Technical Demonstration
+This project showcases:
+- Automated security analysis methodologies
+- Data visualization and reporting capabilities
+- Competitive intelligence frameworks
+- Professional dashboard development
 
-## Installation
-```bash
-git clone https://github.com/yourusername/norwegian-banking-app-security-analyzer
-cd norwegian-banking-app-security-analyzer
-pip install -r requirements.txt
+*Note: This is a demonstration platform using simulated data to show security analysis concepts and methodologies.*
