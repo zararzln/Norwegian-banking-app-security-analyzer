@@ -12,10 +12,10 @@ import logging
 # Add src to Python path
 sys.path.insert(0, str(Path(__file__).parent / "src"))
 
-from src.collectors.app_collector import AppCollector
-from src.analysis.protection_detector import ProtectionDetector
-from src.attacks.bypass_tester import BypassTester
-from src.analysis.effectiveness_analyzer import EffectivenessAnalyzer
+from collectors.app_collector import AppCollector
+from analysis.protection_detector import ProtectionDetector
+from attacks.bypass_tester import BypassTester
+from analysis.effectiveness_analyzer import EffectivenessAnalyzer
 from src.reporting.dashboard import create_dashboard
 from src.config.settings import BANKING_APPS, OUTPUT_DIR
 
