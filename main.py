@@ -30,10 +30,8 @@ def run_analysis():
     """Run the analysis and return results"""
     logger = logging.getLogger(__name__)
     
-    # Create output directory
     os.makedirs(OUTPUT_DIR, exist_ok=True)
     
-    # Initialize components
     collector = AppCollector()
     detector = ProtectionDetector()
     tester = BypassTester()
@@ -42,11 +40,9 @@ def run_analysis():
     results = []
     total_apps = len(BANKING_APPS)
     
-    # Create progress indicators
     progress_bar = st.progress(0)
     status_text = st.empty()
     
-    # Process each banking app
     for i, (app_name, package_name) in enumerate(BANKING_APPS.items(), 1):
         status_text.text(f"[{i}/{total_apps}] Processing {app_name}...")
         
@@ -71,13 +67,20 @@ def run_analysis():
         progress_bar.progress(i / total_apps)
     
     status_text.text("Analyzing overall effectiveness...")
+    
+    # DEBUG: Show what we have before analysis
+    st.write("DEBUG - Raw results before analysis:", results)
+    
     analysis = analyzer.analyze_results(results)
+    
+    # DEBUG: Show what analyzer returns
+    st.write("DEBUG - Analysis output:", analysis)
     
     progress_bar.empty()
     status_text.empty()
     
     return analysis
-
+    
 def main():
     """Main Streamlit app"""
     setup_logging()
