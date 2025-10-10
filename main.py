@@ -1,17 +1,23 @@
 import streamlit as st
 import sys
 from pathlib import Path
+import importlib
 
-# Add src to path
-sys.path.insert(0, str(Path(__file__).parent / "src"))
 
+SRC_PATH = Path(__file__).resolve().parent / "src"
+sys.path.insert(0, str(SRC_PATH))
+
+
+import config.settings
+importlib.reload(config.settings)
+from config.settings import BANKING_APPS, OUTPUT_DIR
 
 from collectors.app_collector import AppCollector
 from analysis.protection_detector import ProtectionDetector
 from attacks.bypass_tester import BypassTester
 from analysis.effectiveness_analyzer import EffectivenessAnalyzer
 from reporting.dashboard import create_dashboard
-from config.settings import BANKING_APPS, OUTPUT_DIR
+
 
 def run_analysis():
 
