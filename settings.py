@@ -6,33 +6,34 @@ import os
 OUTPUT_DIR = "output"
 
 # Banking apps to analyze (Norwegian and Nordic banking apps)
-BANKING_APPS = {
-    "DNB Mobile": "no.dnb.mobilbank",
-    "Nordea Mobile": "com.nordea.mobiletoken",
-    "Sparebank 1": "no.sparebank1.mobilbank",
-    "Handelsbanken": "com.handelsbanken.mobile.android.no",
-    "Skandiabanken": "no.skandiabanken.mobilbank",
-    "Bank Norwegian": "no.banknorwegian.mobilbank",
-    "Storebrand Bank": "no.storebrand.mobilbank",
-    "Cultura Bank": "no.culturabank.mobilbank",
-    "Komplett Bank": "no.komplettbank.mobilbank",
-    "Sbanken": "no.sbanken.mobilbank",
-    "Danske Bank": "com.danskebank.mobilebank3.no",
-    "SEB": "com.seb.android.no",
-    "Santander": "no.santander.mobilbank",
-    "OBOS-banken": "no.obosbanken.mobilbank",
-    "Vipps": "no.dnb.vipps",
-    "Swedbank Norway": "com.swedbank.mobilbank.no",
-    "Nordnet": "com.nordnet.android.no",
-    "Sparebanken Vest": "no.sparebankenvest.mobilbank",
-    "Sparebanken Øst": "no.sparebankenost.mobilbank",
-    "Sparebanken Møre": "no.sparebankenmøre.mobilbank",
-    "Klarna": "com.myklarnamobile",
-    "Lunar": "co.lunarway.lunar",
-    "Revolut": "com.revolut.revolut",
-    "N26": "de.number26.android",
-    "Wise": "com.wise.android"
-}
+BANKING_APPS = [
+    {"name": "DNB Mobile", "package": "no.dnb.mobilbank"},
+    {"name": "Nordea Mobile", "package": "com.nordea.mobiletoken"},
+    {"name": "Sparebank 1", "package": "no.sparebank1.mobilbank"},
+    {"name": "Handelsbanken", "package": "com.handelsbanken.mobile.android.no"},
+    {"name": "Skandiabanken", "package": "no.skandiabanken.mobilbank"},
+    {"name": "Bank Norwegian", "package": "no.banknorwegian.mobilbank"},
+    {"name": "Storebrand Bank", "package": "no.storebrand.mobilbank"},
+    {"name": "Cultura Bank", "package": "no.culturabank.mobilbank"},
+    {"name": "Komplett Bank", "package": "no.komplettbank.mobilbank"},
+    {"name": "Sbanken", "package": "no.sbanken.mobilbank"},
+    {"name": "Danske Bank", "package": "com.danskebank.mobilebank3.no"},
+    {"name": "SEB", "package": "com.seb.android.no"},
+    {"name": "Santander", "package": "no.santander.mobilbank"},
+    {"name": "OBOS-banken", "package": "no.obosbanken.mobilbank"},
+    {"name": "Vipps", "package": "no.dnb.vipps"},
+    {"name": "Swedbank Norway", "package": "com.swedbank.mobilbank.no"},
+    {"name": "Nordnet", "package": "com.nordnet.android.no"},
+    {"name": "Sparebanken Vest", "package": "no.sparebankenvest.mobilbank"},
+    {"name": "Sparebanken Øst", "package": "no.sparebankenost.mobilbank"},
+    {"name": "Sparebanken Møre", "package": "no.sparebankenmøre.mobilbank"},
+    {"name": "Klarna", "package": "com.myklarnamobile"},
+    {"name": "Lunar", "package": "co.lunarway.lunar"},
+    {"name": "Revolut", "package": "com.revolut.revolut"},
+    {"name": "N26", "package": "de.number26.android"},
+    {"name": "Wise", "package": "com.wise.android"}
+]
+
 
 # Protection signatures to look for
 PROTECTION_SIGNATURES = {
