@@ -312,33 +312,41 @@ def create_visualizations(results):
                             st.plotly_chart(fig, use_container_width=True)
     
     # Recommendations
+    # Recommendations
     st.markdown("---")
     if 'recommendations' in results:
         st.markdown("#### 💡 Security Recommendations")
         recs = results['recommendations']
         
-        tab1, tab2, tab3 = st.tabs(["🚨 Critical", "⚠️ Important", "💭 Suggestions"])
-        
-        with tab1:
-            if recs.get('critical'):
-                for i, rec in enumerate(recs['critical'], 1):
-                    st.error(f"**{i}.** {rec}")
-            else:
-                st.success("✅ No critical issues found!")
-        
-        with tab2:
-            if recs.get('important'):
-                for i, rec in enumerate(recs['important'], 1):
-                    st.warning(f"**{i}.** {rec}")
-            else:
-                st.info("✅ No important issues found!")
-        
-        with tab3:
-            if recs.get('suggestions'):
-                for i, rec in enumerate(recs['suggestions'], 1):
-                    st.info(f"**{i}.** {rec}")
-            else:
-                st.success("✅ Following all best practices!")
+        # Check if recs is a list or dict
+        if isinstance(recs, list):
+            # If it's a list, just display all items
+            for i, rec in enumerate(recs, 1):
+                st.info(f"**{i}.** {rec}")
+        elif isinstance(recs, dict):
+            # If it's a dict, use tabs
+            tab1, tab2, tab3 = st.tabs(["🚨 Critical", "⚠️ Important", "💭 Suggestions"])
+            
+            with tab1:
+                if recs.get('critical'):
+                    for i, rec in enumerate(recs['critical'], 1):
+                        st.error(f"**{i}.** {rec}")
+                else:
+                    st.success("✅ No critical issues found!")
+            
+            with tab2:
+                if recs.get('important'):
+                    for i, rec in enumerate(recs['important'], 1):
+                        st.warning(f"**{i}.** {rec}")
+                else:
+                    st.info("✅ No important issues found!")
+            
+            with tab3:
+                if recs.get('suggestions'):
+                    for i, rec in enumerate(recs['suggestions'], 1):
+                        st.info(f"**{i}.** {rec}")
+                else:
+                    st.success("✅ Following all best practices!")
 
 def main():
     """Main Streamlit app"""
