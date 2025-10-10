@@ -95,15 +95,27 @@ def main():
     st.markdown("Analyzing security protection solutions across Norwegian banking apps")
     st.markdown("---")
     
+    # Try to load existing results
+    import json
+    results_file = Path(OUTPUT_DIR) / "analysis_results.json"
+    
+    if 'results' not in st.session_state and results_file.exists():
+        try:
+            with open(results_file, 'r') as f:
+                st.session_state['results'] = json.load(f)
+            st.success("✅ Loaded existing analysis results")
+        except Exception as e:
+            st.error(f"Error loading results: {e}")
+    
     # Sidebar
     with st.sidebar:
         st.header("Analysis Settings")
         st.info(f"📱 Total Apps: {len(BANKING_APPS)}")
         
-        if st.button("🚀 Run Analysis", type="primary"):
+        if st.button("🔄 Re-run Analysis", type="primary"):
             st.session_state['run_analysis'] = True
     
-    # Main content
+    # Run analysis if button clicked
     if st.session_state.get('run_analysis', False):
         with st.spinner("Running comprehensive analysis..."):
             results = run_analysis()
@@ -112,8 +124,8 @@ def main():
         st.success("✅ Analysis complete!")
     
     # Display results if available
-   # Display results if available
     if 'results' in st.session_state:
+        # [KEEP ALL YOUR VISUALIZATION CODE HERE - don't change anything below]
         st.markdown("---")
         st.header("📊 Analysis Results")
         
