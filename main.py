@@ -10,7 +10,7 @@ from analysis.protection_detector import ProtectionDetector
 from attacks.bypass_tester import BypassTester
 from analysis.effectiveness_analyzer import EffectivenessAnalyzer
 from reporting.dashboard import create_dashboard
-from src.config.settings import BANKING_APPS, OUTPUT_DIR
+from config.settings import BANKING_APPS, OUTPUT_DIR
 
 def run_analysis():
 
