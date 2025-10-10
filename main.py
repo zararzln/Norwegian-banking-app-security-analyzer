@@ -14,11 +14,10 @@ from src.config.settings import BANKING_APPS, OUTPUT_DIR
 
 def run_analysis():
 
-st.write("BANKING_APPS:", BANKING_APPS)
-st.write("Type of BANKING_APPS:", type(BANKING_APPS))
+    st.write("BANKING_APPS:", BANKING_APPS)
+    st.write("Type of BANKING_APPS:", type(BANKING_APPS))
 
     """Run the complete analysis"""
-    # Your existing analysis code here
     collector = AppCollector()
     detector = ProtectionDetector()
     tester = BypassTester()
