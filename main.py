@@ -119,24 +119,54 @@ def main():
         st.success("✅ Analysis complete!")
     
     # Display results if available
+    # Display results if available
     if 'results' in st.session_state:
         st.markdown("---")
         st.header("📊 Analysis Results")
         
-        # Call the dashboard creation function with results
-        create_dashboard(st.session_state['results'])
-    else:
-        # Show instructions
-        st.info("👈 Click 'Run Analysis' in the sidebar to start analyzing banking apps")
+        results = st.session_state['results']
         
-        st.markdown("### What this analyzer does:")
-        st.markdown("""
-        - 📱 Collects information from Norwegian banking apps
-        - 🔍 Detects protection solutions (ProGuard, DexGuard, AppShield, etc.)
-        - ⚔️ Tests bypass techniques
-        - 📊 Analyzes overall effectiveness
-        - 📈 Generates comprehensive visualizations
-        """)
+        # Display summary metrics
+        col1, col2, col3 = st.columns(3)
+        
+        with col1:
+            st.metric("Total Apps Analyzed", len(results.get('apps', [])))
+        
+        with col2:
+            protected = sum(1 for app in results.get('apps', []) if app.get('protection', {}).get('detected'))
+            st.metric("Protected Apps", protected)
+        
+        with col3:
+            avg_effectiveness = results.get('summary', {}).get('average_effectiveness', 0)
+            st.metric("Avg Effectiveness", f"{avg_effectiveness:.1f}%")
+        
+        # Display detailed results
+        st.subheader("Detailed App Analysis")
+        
+        for app in results.get('apps', []):
+            with st.expander(f"📱 {app.get('app_name', 'Unknown App')}"):
+                st.write(f"**Package:** {app.get('package_name', 'N/A')}")
+                
+                protection = app.get('protection', {})
+                st.write(f"**Protection Detected:** {protection.get('detected', 'Unknown')}")
+                
+                if protection.get('solutions'):
+                    st.write("**Protection Solutions:**")
+                    for solution in protection.get('solutions', []):
+                        st.write(f"- {solution}")
+                
+                bypass = app.get('bypass_results', {})
+                if bypass:
+                    st.write(f"**Bypass Success Rate:** {bypass.get('success_rate', 0):.1f}%")
+        
+        # Download button for raw results
+        import json
+        st.download_button(
+            label="📥 Download Full Results (JSON)",
+            data=json.dumps(results, indent=2),
+            file_name="analysis_results.json",
+            mime="application/json"
+        )
 
 if __name__ == "__main__":
     main()
