@@ -3,7 +3,7 @@
 import logging
 import random
 import time
-from src.config.settings import BYPASS_TESTS
+from config.settings import BYPASS_TESTS
 
 class BypassTester:
     """Tests bypass techniques against protected apps"""
