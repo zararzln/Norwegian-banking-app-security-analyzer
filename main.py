@@ -119,47 +119,42 @@ def main():
         st.success("✅ Analysis complete!")
     
     # Display results if available
-    # Display results if available
+   # Display results if available
     if 'results' in st.session_state:
         st.markdown("---")
         st.header("📊 Analysis Results")
         
         results = st.session_state['results']
         
-        # Display summary metrics
-        col1, col2, col3 = st.columns(3)
+        # Show raw structure first to debug
+        with st.expander("🔍 Debug: View Raw Results Structure"):
+            st.json(results)
         
-        with col1:
-            st.metric("Total Apps Analyzed", len(results.get('apps', [])))
+        # Try to display whatever structure exists
+        st.subheader("Complete Analysis Results")
         
-        with col2:
-            protected = sum(1 for app in results.get('apps', []) if app.get('protection', {}).get('detected'))
-            st.metric("Protected Apps", protected)
-        
-        with col3:
-            avg_effectiveness = results.get('summary', {}).get('average_effectiveness', 0)
-            st.metric("Avg Effectiveness", f"{avg_effectiveness:.1f}%")
-        
-        # Display detailed results
-        st.subheader("Detailed App Analysis")
-        
-        for app in results.get('apps', []):
-            with st.expander(f"📱 {app.get('app_name', 'Unknown App')}"):
-                st.write(f"**Package:** {app.get('package_name', 'N/A')}")
+        # Display everything we can find
+        if isinstance(results, dict):
+            for key, value in results.items():
+                st.markdown(f"### {key.replace('_', ' ').title()}")
                 
-                protection = app.get('protection', {})
-                st.write(f"**Protection Detected:** {protection.get('detected', 'Unknown')}")
+                if isinstance(value, list):
+                    for i, item in enumerate(value):
+                        with st.expander(f"Item {i+1}"):
+                            if isinstance(item, dict):
+                                for k, v in item.items():
+                                    st.write(f"**{k}:**", v)
+                            else:
+                                st.write(item)
+                elif isinstance(value, dict):
+                    for k, v in value.items():
+                        st.write(f"**{k}:**", v)
+                else:
+                    st.write(value)
                 
-                if protection.get('solutions'):
-                    st.write("**Protection Solutions:**")
-                    for solution in protection.get('solutions', []):
-                        st.write(f"- {solution}")
-                
-                bypass = app.get('bypass_results', {})
-                if bypass:
-                    st.write(f"**Bypass Success Rate:** {bypass.get('success_rate', 0):.1f}%")
+                st.markdown("---")
         
-        # Download button for raw results
+        # Download button
         import json
         st.download_button(
             label="📥 Download Full Results (JSON)",
