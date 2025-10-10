@@ -24,24 +24,47 @@ from reporting.dashboard import create_dashboard
 
 
 def run_analysis():
-
-    st.write("BANKING_APPS:", BANKING_APPS)
-    st.write("Type of BANKING_APPS:", type(BANKING_APPS))
-
     """Run the complete analysis"""
     collector = AppCollector()
     detector = ProtectionDetector()
     tester = BypassTester()
+    analyzer = EffectivenessAnalyzer()
     
     results = []
     progress_bar = st.progress(0)
     status_text = st.empty()
     
-    for idx, app in enumerate(BANKING_APPS):
-        status_text.text(f"Processing {app['name']}...")
-        # Your analysis logic
+    for idx, app_package in enumerate(BANKING_APPS):
+        # Handle string package names
+        status_text.text(f"Processing {app_package}...")
+        
+        try:
+            # Collect app info
+            app_info = collector.collect_app_info(app_package)
+            
+            # Detect protections
+            protections = detector.detect_protection(app_package)
+            
+            # Run bypass tests
+            bypass_results = tester.run_bypass_tests(app_package)
+            
+            # Analyze effectiveness
+            effectiveness = analyzer.analyze(app_package, protections, bypass_results)
+            
+            results.append({
+                'package': app_package,
+                'info': app_info,
+                'protections': protections,
+                'bypass_results': bypass_results,
+                'effectiveness': effectiveness
+            })
+            
+        except Exception as e:
+            st.error(f"Error processing {app_package}: {str(e)}")
+        
         progress_bar.progress((idx + 1) / len(BANKING_APPS))
     
+    status_text.text("Analysis complete!")
     return results
 
 def main():
