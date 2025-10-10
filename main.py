@@ -1,110 +1,103 @@
-import streamlit as st
+#!/usr/bin/env python3
+"""
+Mobile App Shield Effectiveness Analyzer
+Main execution file
+"""
+
 import sys
+import os
 from pathlib import Path
-import importlib.util
+import logging
 
-# Force load the correct config/settings.py
-ROOT_DIR = Path(__file__).resolve().parent
-SETTINGS_PATH = ROOT_DIR / "src" / "config" / "settings.py"
+# Add src to Python path
+sys.path.insert(0, str(Path(__file__).parent / "src"))
 
-spec = importlib.util.spec_from_file_location("settings", SETTINGS_PATH)
-settings = importlib.util.module_from_spec(spec)
-spec.loader.exec_module(settings)
+from src.collectors.app_collector import AppCollector
+from src.analysis.protection_detector import ProtectionDetector
+from src.attacks.bypass_tester import BypassTester
+from src.analysis.effectiveness_analyzer import EffectivenessAnalyzer
+from src.reporting.dashboard import create_dashboard
+from src.config.settings import BANKING_APPS, OUTPUT_DIR
 
-BANKING_APPS = settings.BANKING_APPS
-OUTPUT_DIR = settings.OUTPUT_DIR
+def setup_logging():
+    """Setup logging configuration"""
+    logging.basicConfig(
+        level=logging.INFO,
+        format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+        handlers=[
+            logging.FileHandler('shield_analyzer.log'),
+            logging.StreamHandler()
+        ]
+    )
 
-# Import the rest AFTER
-from collectors.app_collector import AppCollector
-from analysis.protection_detector import ProtectionDetector
-from attacks.bypass_tester import BypassTester
-from analysis.effectiveness_analyzer import EffectivenessAnalyzer
-from reporting.dashboard import create_dashboard
-
-
-
-def run_analysis():
-    """Run the complete analysis"""
+def main():
+    """Main execution function"""
+    setup_logging()
+    logger = logging.getLogger(__name__)
+    
+    logger.info("🛡️  Starting Mobile App Shield Effectiveness Analyzer")
+    logger.info("="*60)
+    
+    # Create output directory
+    os.makedirs(OUTPUT_DIR, exist_ok=True)
+    
+    # Initialize components
+    logger.info("Initializing components...")
     collector = AppCollector()
     detector = ProtectionDetector()
     tester = BypassTester()
     analyzer = EffectivenessAnalyzer()
     
     results = []
-    progress_bar = st.progress(0)
-    status_text = st.empty()
+    total_apps = len(BANKING_APPS)
     
-    for idx, app_package in enumerate(BANKING_APPS):
-        # Handle string package names
-        status_text.text(f"Processing {app_package}...")
+    # Process each banking app
+    for i, (app_name, package_name) in enumerate(BANKING_APPS.items(), 1):
+        logger.info(f"[{i}/{total_apps}] Processing {app_name}...")
         
         try:
-            # Collect app info
-            app_info = collector.collect_app_info(app_package)
+            # Step 1: Collect app info
+            logger.info(f"  📱 Collecting app information...")
+            app_info = collector.get_app_info(package_name)
             
-            # Detect protections
-            protections = detector.detect_protection(app_package)
+            # Step 2: Detect protection
+            logger.info(f"  🔍 Analyzing protection solutions...")
+            protection_info = detector.analyze_protection(package_name)
             
-            # Run bypass tests
-            bypass_results = tester.run_bypass_tests(app_package)
+            # Step 3: Run bypass tests
+            logger.info(f"  ⚔️  Running bypass tests...")
+            bypass_results = tester.run_tests(package_name)
             
-            # Analyze effectiveness
-            effectiveness = analyzer.analyze(app_package, protections, bypass_results)
+            # Combine results
+            app_result = {
+                'app_name': app_name,
+                'package_name': package_name,
+                'app_info': app_info,
+                'protection': protection_info,
+                'bypass_results': bypass_results
+            }
             
-            results.append({
-                'package': app_package,
-                'info': app_info,
-                'protections': protections,
-                'bypass_results': bypass_results,
-                'effectiveness': effectiveness
-            })
+            results.append(app_result)
+            logger.info(f"  ✅ Completed analysis for {app_name}")
             
         except Exception as e:
-            st.error(f"Error processing {app_package}: {str(e)}")
+            logger.error(f"  ❌ Error processing {app_name}: {str(e)}")
+            continue
         
-        progress_bar.progress((idx + 1) / len(BANKING_APPS))
+        logger.info("-" * 50)
     
-    status_text.text("Analysis complete!")
-    return results
-
-def main():
-    st.set_page_config(
-        page_title="Mobile App Shield Analyzer",
-        page_icon="🛡️",
-        layout="wide"
-    )
+    # Analyze overall effectiveness
+    logger.info("📊 Analyzing overall effectiveness...")
+    analysis = analyzer.analyze_results(results)
     
-    st.title("🛡️ Mobile App Shield Effectiveness Analyzer")
-    st.markdown("### Analyze mobile banking app security protections")
+    # Generate reports
+    logger.info("📈 Generating dashboard...")
+    create_dashboard(analysis)
     
-    # Sidebar controls
-    with st.sidebar:
-        st.header("Controls")
-        if st.button("▶️ Start Analysis", type="primary"):
-            st.session_state['run_analysis'] = True
-    
-    # Main content
-    if st.session_state.get('run_analysis', False):
-        with st.spinner("Running comprehensive analysis..."):
-            results = run_analysis()
-            st.session_state['results'] = results
-            st.session_state['run_analysis'] = False
-        st.success("✅ Analysis complete!")
-    
-    # Display results if available
-    if 'results' in st.session_state:
-        create_dashboard(st.session_state['results'])
-    else:
-        st.info("👈 Click 'Start Analysis' in the sidebar to begin")
-        
-        # Show preview/description
-        st.markdown("""
-        This tool analyzes mobile banking applications for:
-        - 🔍 Protection solution detection
-        - 🛡️ Shield effectiveness evaluation
-        - ⚠️ Vulnerability assessment
-        - 📊 Comprehensive reporting
-        """)
+    logger.info("="*60)
+    logger.info("🎉 Analysis complete!")
+    logger.info("📱 Dashboard available at: http://localhost:8501")
+    logger.info("📄 Run 'streamlit run src/reporting/dashboard.py' to view results")
 
 if __name__ == "__main__":
     main()
