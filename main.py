@@ -5,6 +5,7 @@ from pathlib import Path
 # Add src to path
 sys.path.insert(0, str(Path(__file__).parent / "src"))
 
+
 from collectors.app_collector import AppCollector
 from analysis.protection_detector import ProtectionDetector
 from attacks.bypass_tester import BypassTester
