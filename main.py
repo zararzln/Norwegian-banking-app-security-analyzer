@@ -3,20 +3,30 @@ import sys
 from pathlib import Path
 import importlib
 
+# ✅ Get full path to the src/config/settings.py file
+ROOT_DIR = Path(__file__).resolve().parent
+SRC_PATH = ROOT_DIR / "src"
+CONFIG_PATH = SRC_PATH / "config"
 
-SRC_PATH = Path(__file__).resolve().parent / "src"
+# ✅ Add both src and config folders to sys.path
 sys.path.insert(0, str(SRC_PATH))
+sys.path.insert(0, str(CONFIG_PATH))
 
+# ✅ Manually load the settings module to guarantee it's the one inside src/config
+spec = importlib.util.spec_from_file_location("settings", CONFIG_PATH / "settings.py")
+settings = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(settings)
 
-import config.settings
-importlib.reload(config.settings)
-from config.settings import BANKING_APPS, OUTPUT_DIR
+BANKING_APPS = settings.BANKING_APPS
+OUTPUT_DIR = settings.OUTPUT_DIR
 
+# ✅ Import everything else after loading settings
 from collectors.app_collector import AppCollector
 from analysis.protection_detector import ProtectionDetector
 from attacks.bypass_tester import BypassTester
 from analysis.effectiveness_analyzer import EffectivenessAnalyzer
 from reporting.dashboard import create_dashboard
+
 
 
 def run_analysis():
