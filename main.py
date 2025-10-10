@@ -16,8 +16,8 @@ from collectors.app_collector import AppCollector
 from analysis.protection_detector import ProtectionDetector
 from attacks.bypass_tester import BypassTester
 from analysis.effectiveness_analyzer import EffectivenessAnalyzer
-from src.reporting.dashboard import create_dashboard
-from src.config.settings import BANKING_APPS, OUTPUT_DIR
+from reporting.dashboard import create_dashboard
+from config.settings import BANKING_APPS, OUTPUT_DIR
 
 def setup_logging():
     """Setup logging configuration"""
