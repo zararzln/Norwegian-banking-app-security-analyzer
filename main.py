@@ -1,26 +1,20 @@
 import streamlit as st
 import sys
 from pathlib import Path
-import importlib
+import importlib.util
 
-# ✅ Get full path to the src/config/settings.py file
+# Force load the correct config/settings.py
 ROOT_DIR = Path(__file__).resolve().parent
-SRC_PATH = ROOT_DIR / "src"
-CONFIG_PATH = SRC_PATH / "config"
+SETTINGS_PATH = ROOT_DIR / "src" / "config" / "settings.py"
 
-# ✅ Add both src and config folders to sys.path
-sys.path.insert(0, str(SRC_PATH))
-sys.path.insert(0, str(CONFIG_PATH))
-
-# ✅ Manually load the settings module to guarantee it's the one inside src/config
-spec = importlib.util.spec_from_file_location("settings", CONFIG_PATH / "settings.py")
+spec = importlib.util.spec_from_file_location("settings", SETTINGS_PATH)
 settings = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(settings)
 
 BANKING_APPS = settings.BANKING_APPS
 OUTPUT_DIR = settings.OUTPUT_DIR
 
-# ✅ Import everything else after loading settings
+# Import the rest AFTER
 from collectors.app_collector import AppCollector
 from analysis.protection_detector import ProtectionDetector
 from attacks.bypass_tester import BypassTester
